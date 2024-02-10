@@ -1,16 +1,13 @@
-# society
+#Society Management System
 
-A new Flutter project.
+Apartment culture is very common in small, medium or big cities where various 
+amenities, like theatre, swimming pool, game zone, banquet hall, gym, etc. have been 
+shared among many people. Generally, societies are having the flats between 100 to 
+600 and around 300 to 1800 people in the society can be expected. Two types of 
+credentials are expected: Society members (president, secretory, treasure, etc.) and 
+flat holders. Amenity booking, payment gateway, budget analysis, circulators/notice, 
+records, and security features are expected in the application. Also we can have 
+services booking like electrician, plumbing, Carpenter, Ac repairing, gardening and 
+internet services.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Github Repository Link :-
