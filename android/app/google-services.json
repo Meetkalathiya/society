@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1068575332396",
+    "project_id": "society-management-syste-771be",
+    "storage_bucket": "society-management-syste-771be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068575332396:android:da2b37dbb624047a271989",
+        "android_client_info": {
+          "package_name": "com.example.society"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDgBHCYHZPphdaEA7WSwm9vUWSlrHm3Ow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
