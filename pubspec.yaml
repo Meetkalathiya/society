@@ -39,6 +39,13 @@ dependencies:
   qr_flutter: ^4.1.0
   firebase_storage: ^11.6.5
   firebase_auth: ^4.17.4
+  get: ^4.6.6
+  cloud_firestore: ^4.15.4
+  firebase_core: ^2.25.4
+  sms_autofill: ^2.3.0
+  share: ^2.0.4
+  qr_code_scanner: ^1.0.0
+  permission_handler: ^9.2.0
 
 dev_dependencies:
   flutter_test:

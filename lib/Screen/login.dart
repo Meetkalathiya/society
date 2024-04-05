@@ -1,57 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:society/Screen/bottom_nav_screen.dart';
-import 'package:society/Screen/main_screen.dart';
+import 'package:society/Screen/otp_screen.dart';
 import 'package:society/Screen/signup_screen.dart';
-
+import 'package:society/Screen/splash_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController Numcontroller = TextEditingController();
-  TextEditingController Passcontroller = TextEditingController();
+  TextEditingController numController = TextEditingController();
+  TextEditingController passController = TextEditingController();
 
   bool _showPassword = true;
-  String? numerrortext;
-  String? passerrortext;
+  String? numErrorText;
+  String? passErrorText;
 
-  void NavigateToSignup() {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String? _verificationId; // Declare _verificationId here
+
+  void navigateToSignup() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => SignupScreen()));
   }
 
-  // void NavigateToBootomNav() {
-  //   Navigator.pushReplacement(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => BottomNavScreen(),
-  //     ),
-  //   );
-  // }
-
-  void NavigateToBootomNav() {
+  void navigateToBottomNav() {
     setState(() {
-      numerrortext =
-          (Numcontroller.text.isEmpty) ? "Please enter a Mobile number" : null;
-      passerrortext =
-          (Passcontroller.text.isEmpty) ? "Please enter a Password" : null;
+      numErrorText =
+          (numController.text.isEmpty) ? "Please enter a Mobile number" : null;
+      passErrorText =
+          (passController.text.isEmpty) ? "Please enter a Password" : null;
     });
-    if (numerrortext == null && passerrortext == null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => BottomNavScreen()),
-      );
+    if (numErrorText == null && passErrorText == null) {
+      // Perform phone number authentication here
+      _authenticateWithPhoneNumber(numController.text);
     }
   }
 
-  void ToshowPassword() {
+  void toggleShowPassword() {
     setState(() {
       _showPassword = !_showPassword;
     });
+  }
+
+  Future<void> _authenticateWithPhoneNumber(String phoneNumber) async {
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          // Auto-retrieve verification code
+          await _auth.signInWithCredential(credential);
+          print("Authentication Successful!");
+          // Navigate to the desired screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNavScreen()),
+          );
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          print("Verification Failed: $e");
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          // Store verification ID for later use
+          setState(() {
+            _verificationId = verificationId;
+          });
+          // Navigate to the OTP screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpScreen(
+                verificationId: verificationId,
+                mobileNumber: phoneNumber,
+              ),
+            ),
+          );
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          setState(() {
+            _verificationId = verificationId;
+          });
+        },
+        timeout: const Duration(seconds: 120),
+      );
+    } catch (e) {
+      print("Error authenticating with phone number: $e");
+    }
   }
 
   @override
@@ -63,12 +102,10 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            // Navigator.pop(context);
-            // Navigator.popUntil(context, (route) => route.isFirst);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HomePage(),
+                builder: (context) => SplashScreen(),
               ),
             );
           },
@@ -109,19 +146,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextField(
-                    controller: Numcontroller,
+                    controller: numController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       icon: Icon(Icons.person),
                       labelText: 'Enter a Mobile number',
                       floatingLabelBehavior: FloatingLabelBehavior.never,
-                      errorText: numerrortext,
+                      errorText: numErrorText,
                       border: InputBorder.none,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -131,16 +168,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextField(
-                    controller: Passcontroller,
+                    controller: passController,
                     obscureText: _showPassword,
                     decoration: InputDecoration(
                       icon: Icon(Icons.lock),
                       labelText: 'Password',
                       floatingLabelBehavior: FloatingLabelBehavior.never,
-                      errorText: passerrortext,
+                      errorText: passErrorText,
                       border: InputBorder.none,
                       suffixIcon: IconButton(
-                        onPressed: ToshowPassword,
+                        onPressed: toggleShowPassword,
                         icon: Icon(_showPassword
                             ? Icons.visibility_off
                             : Icons.visibility),
@@ -149,14 +186,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30))),
-                  onPressed: NavigateToBootomNav,
+                  onPressed: navigateToBottomNav,
                   child: Text(
                     'Login',
                     style: TextStyle(color: Colors.black, fontSize: 20),
@@ -170,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Text("don't have an account?  "),
                     TextButton(
-                      onPressed: NavigateToSignup,
+                      onPressed: navigateToSignup,
                       child: Text(
                         "Sign up.",
                         style: TextStyle(fontWeight: FontWeight.bold),

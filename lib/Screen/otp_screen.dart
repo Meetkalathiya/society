@@ -1,15 +1,20 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:society/Screen/signup_screen_two.dart';
+import 'package:society/Screen/bottom_nav_screen.dart';
 
-
+// ignore: must_be_immutable
 class OtpScreen extends StatefulWidget {
+  String verificationId;
+  OtpScreen({super.key,required this.verificationId, required String mobileNumber});
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  
+  TextEditingController otpController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +96,21 @@ class _OtpScreenState extends State<OtpScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed:(){
-                    Navigator.push(
+                  onPressed:()async{
+                    try{
+                      PhoneAuthCredential credential=await PhoneAuthProvider.credential(verificationId: widget.verificationId,smsCode:otpController.text.toString());
+                      FirebaseAuth.instance.signInWithCredential(credential).then((value) => {
+                        Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SignupScreento(),
+                          builder: (context) => BottomNavScreen(),
                         ),
-                      );
+                      ),
+                      });
+                    }catch(ex){
+                        log(ex.toString() as num);
+                    }
+                    
                   },
                   child: Text(
                     'Verify your otp',

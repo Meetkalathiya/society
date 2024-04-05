@@ -6,7 +6,7 @@ import 'package:society/Screen/update_screen.dart';
 
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key});
+  const BottomNavScreen({super.key});    
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
