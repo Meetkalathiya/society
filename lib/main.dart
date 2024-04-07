@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+//import 'package:society/Screen/community_help.dart';
+import 'package:society/Screen/qr_scanner_screen.dart';
 //import 'package:society/Screen/add_due_secretory_screen.dart';
 //import 'package:society/Screen/allow_guest_screen.dart';
-import 'package:society/Screen/qr_scanner_screen.dart';
+//import 'package:society/Screen/qr_scanner_screen.dart';
 //import 'package:society/Screen/splash_screen.dart';
 //import 'package:society/Screen/splash_screen.dart';
 
