@@ -1,24 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
-  class QRScannerWidget extends StatefulWidget {
-  const QRScannerWidget({Key? key}) : super(key: key);
-
+class QRScannerScreen extends StatefulWidget {
   @override
-  _QRScannerWidgetState createState() => _QRScannerWidgetState();
+  _QRScannerScreenState createState() => _QRScannerScreenState();
 }
 
-class _QRScannerWidgetState extends State<QRScannerWidget> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
+class _QRScannerScreenState extends State<QRScannerScreen> {
   Barcode? result;
+  QRViewController? controller;
+  
+  get globalKey => null;
 
-  @override
-  void initState() {
-    super.initState();
-    requestCameraPermission();
-  }
   @override
   void dispose() {
     controller?.dispose();
@@ -28,36 +24,47 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('QR Scanner'),
+      ),
       body: Column(
         children: <Widget>[
           Expanded(
+            flex: 5,
             child: QRView(
-              key: qrKey,
+              key: globalKey,
               onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                borderColor: Colors.red,
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 5,
+                cutOutSize: 300,
+              ),
             ),
           ),
-          if (result != null)
-            Text('Scanned QR code: ${result!.code}')
-          else
-            const Text('Scan a QR code'),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: (result != null)
+                  ? Text(
+                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                  : Text('Scan a QR code'),
+            ),
+          )
         ],
       ),
     );
   }
 
-void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
       });
     });
-  }
-
-  Future<void> requestCameraPermission() async {
-    var status = await Permission.camera.status;
-    if (status.isDenied) {
-      await Permission.camera.request();
-    }
   }
 }
