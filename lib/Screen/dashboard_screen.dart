@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:society/Screen/all_aminity_details.dart';
 import 'package:society/Screen/allow_guest_screen.dart';
-import 'package:society/Screen/aminity_book_screen.dart';
+//import 'package:society/Screen/aminity_book_screen.dart';
 import 'package:society/Screen/bottom_nav_screen.dart';
 import 'package:society/Screen/login.dart';
 import 'package:society/Screen/profile_screen.dart';
@@ -196,7 +196,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AllowGuestScreen(),
+                          builder: (context) => QrConfirmationScreen(),
                         ),
                       );
                     },

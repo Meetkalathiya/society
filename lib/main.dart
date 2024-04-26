@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:society/Screen/splash_screen.dart';
+import 'package:society/Screen/allow_guest_screen.dart';
+//import 'package:society/Screen/splash_screen.dart';
 //import 'package:society_app/User_Screen/splash_screen.dart';
 import 'firebase_options.dart';
 
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: SplashScreen(),
+      home: QrConfirmationScreen(qrData: '',),
     );
   }
 }
