@@ -1,23 +1,36 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
-class QRScannerScreen extends StatefulWidget {
-  @override
-  _QRScannerScreenState createState() => _QRScannerScreenState();
+void main() {
+  runApp(MyApp());
 }
 
-class _QRScannerScreenState extends State<QRScannerScreen> {
-  Barcode? result;
-  QRViewController? controller;
-  
-  get globalKey => null;
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'QR Code Scanner',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: QRCodeScannerScreen(),
+    );
+  }
+}
+
+class QRCodeScannerScreen extends StatefulWidget {
+  @override
+  _QRCodeScannerScreenState createState() => _QRCodeScannerScreenState();
+}
+
+class _QRCodeScannerScreenState extends State<QRCodeScannerScreen> {
+  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? _controller;
+  String _qrText = '';
 
   @override
   void dispose() {
-    controller?.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -25,45 +38,40 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('QR Scanner'),
+        title: Text('QR Code Scanner'),
       ),
       body: Column(
-        children: <Widget>[
+        children: [
           Expanded(
-            flex: 5,
             child: QRView(
-              key: globalKey,
+              key: _qrKey,
               onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Colors.red,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 5,
-                cutOutSize: 300,
-              ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Text(
-                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a QR code'),
-            ),
-          )
+          _buildResultWidget(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildResultWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        _qrText,
+        style: TextStyle(fontSize: 18),
+        textAlign: TextAlign.center,
       ),
     );
   }
 
   void _onQRViewCreated(QRViewController controller) {
     setState(() {
-      this.controller = controller;
+      _controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        result = scanData;
+        _qrText = scanData.code!;
       });
     });
   }
