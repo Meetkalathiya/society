@@ -1,4 +1,5 @@
-#Society Management System
+
+# Society Management System
 
 Apartment culture is very common in small, medium or big cities where various 
 amenities, like theatre, swimming pool, game zone, banquet hall, gym, etc. have been 
@@ -11,3 +12,20 @@ services booking like electrician, plumbing, Carpenter, Ac repairing, gardening 
 internet services.
 
 Github Repository Link :- https://github.com/Meetkalathiya/society
+
+
+## Features
+
+- Various login interface for the different society users
+
+- Pending maintenance that could be paid by using this app.
+-  Qr Scanning verify for the guests
+- Community help desk for common help
+- various amminities booking like Indoor Theater, Party Hall, Common Plot, etc.
+
+- Services booking like plumbing, Carpenter, Internet services, etc
+
+- Common notice boards to provide the notices
+
+- Feedback sharing from the people
+
